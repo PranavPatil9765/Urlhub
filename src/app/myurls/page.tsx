@@ -3,6 +3,8 @@ import QRCodeGenerator from '@/components/qrgenerator';
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import List from '../../components/List';
+import { toast,ToastContainer } from 'react-toastify';
 const myurls = () => {
     const router = useRouter(); // Initialize router
     const { data: session } = useSession(); // Use session to check authentication
@@ -12,6 +14,9 @@ const myurls = () => {
     const [item, setItem] = useState({});
     const [loading, setLoading] = useState(true);
     async function geturls(){
+      try {
+        
+      
         setLoading(true);
         const res = await fetch("/api/geturls", {
             method: "POST",
@@ -24,6 +29,9 @@ const myurls = () => {
         if (res.status === 200) {
             setUrls(data);
         }
+        } catch (error) {
+        
+      }
         setLoading(false);
 
     }
@@ -35,69 +43,29 @@ const myurls = () => {
         geturls();
     },[page,session])
 
+     const handleDeleteUrl = (shortUrl: string) => {
+    setUrls(prev => prev.filter(url => url.shortUrl !== shortUrl));
+    // toast.success("URL deleted successfully");
+  };
+
     
 
 
   return (
-    <div>myurls
+    <div className='md:w-[80%] flex flex-col justify-center items-center m-auto mt-20  w-[90%]'>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
-    {carddisplay && <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
-  <div className="bg-white p-4 rounded shadow-lg">
-    <h2 className="text-lg font-bold">QR Code</h2>
-    <QRCodeGenerator item = {item} />
-    <button className="btn btn-primary" onClick={() => setCardDisplay(false)}>Close</button>
-  </div>
-</div>}
+   
 
-<ul className="list bg-base-100 rounded-box shadow-md">
-  
-  {loading && <div className="flex justify-center items-center"><img src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-loading-circular-flatart-icons-lineal-color-flatarticons.png" alt="external-loading-circular-flatart-icons-lineal-color-flatarticons"/></div>}
-
- 
-  
-    {urls.map((item, index) => (
-       <li className="list-row" key={index}>
-       <div><img className="size-10 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp"/></div>
-       <div>
-         <div>{item.Alias}</div>
-         <div className="text-xs font-semibold opacity-60">{process.env.NEXT_PUBLIC_API_BASE_URL}/api/{item.shortUrl}</div>
-       </div>
-       <p className="list-col-wrap text-xs">
-        {item.originalUrl}
-       </p>
-
-
-       <button className="btn btn-square btn-ghost"  onClick={() => navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${item.shortUrl}`)}      >
-      <img width="48" height="48" src="https://img.icons8.com/color/48/copy--v1.png" alt="copy--v1"/>   </button>
-     
-
-
-
-       <button className="btn btn-square btn-ghost" onClick={()=>{
-         setCardDisplay(true);
-            setItem(item);
-    }}>
-   <img width="100" height="100" src="https://img.icons8.com/plasticine/100/qr-code.png" alt="qr-code"/>
-    </button>
-       <button className="btn btn-square btn-ghost" onClick={()=>{
-        window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${item.shortUrl}` ;
-    }}>
-      <img width="25" height="25" src="https://img.icons8.com/external-tal-revivo-duo-tal-revivo/25/external-web-hyperlink-with-url-for-navigating-to-new-page-text-duo-tal-revivo.png" alt="external-web-hyperlink-with-url-for-navigating-to-new-page-text-duo-tal-revivo"/>
-    </button>
-    
-    <button className="btn btn-square btn-ghost" onClick={()=>{
-        fetch(`/api/deleteurl/${item.shortUrl}`, {
-            method: "DELETE",
-          })
-         setUrls(urls.filter((url)=> url.shortUrl!=item.shortUrl))
+    {
+      urls.map((url,ind)=>{
+        return(
           
-    }}>
-      <img width="64" height="64" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-dustbin-smart-home-flatart-icons-lineal-color-flatarticons.png" alt="external-dustbin-smart-home-flatart-icons-lineal-color-flatarticons"/>
-    </button>
-     </li>
-    ))}
- 
-</ul>
+          <List key={ind} url={url} Delete={handleDeleteUrl} />
+          
+        )
+      })
+    }
 
 
 

@@ -19,8 +19,12 @@ const Navbar = () => {
         <button>Myurls</button>
         </Link>
         </li>
-        <li><Link href= '/Dashboard'>
-        <button>Create Url</button>
+        <li><Link href= '/dashboard'>
+        <button>Shorten Url</button>
+        </Link>
+        </li>
+        <li><Link href= '/analytics'>
+        <button>Analytics</button>
         </Link>
         </li>
         

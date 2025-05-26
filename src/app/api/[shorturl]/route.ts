@@ -13,6 +13,7 @@ export async function GET(req: Request, context: { params: { shorturl: string } 
         if (!shorturl || typeof shorturl !== "string") {
             return NextResponse.json({ message: "Invalid Short URL" }, { status: 400 });
         }
+        console.log(shorturl)
 
         const userIP = req.headers.get("x-forwarded-for") || req.headers.get("remote-address");
         const userAgent = req.headers.get("user-agent");

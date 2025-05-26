@@ -1,47 +1,46 @@
-"use client"; // Ensure it's a client component
+"use client";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import List from "./component/List";
-import { set } from "mongoose";
+import List, { Url } from "../../components/List";
+import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
+
 const Dashboard = () => {
-  const router = useRouter(); // Initialize router
-  const { data: session } = useSession(); // Use session to check authentication
-  const [urls, setUrls] = useState([]);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [urls, setUrls] = useState<Url[]>([]);
   const [loading1, setLoading1] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formdata, setFormData] = useState({
-    url: "",
-    alias: "",
-  });
+  const [formdata, setFormData] = useState({ url: "", alias: "" });
 
+  const handleDeleteUrl = (shortUrl: string) => {
+    setUrls((prev) => prev.filter((url) => url.shortUrl !== shortUrl));
+    toast.success("URL deleted successfully");
+  };
 
-    useEffect(() => {
+  useEffect(() => {
+    if (!session) {
+      router.push("/signin");
+      return;
+    }
 
-      if(!session){
-        router.push("/signin"); // Redirect to sign-in page if not authenticated
-        return;
-      }
+    setLoading(true);
+    fetch("/api/geturls")
+      .then((res) => res.json())
+      .then((data) => {
+        setUrls(data);
+        setLoading(false);
+      })
+      .catch((err) => console.error("Error fetching data:", err));
+  }, [session]);
 
-      setLoading(true);
-        fetch("/api/geturls") // Use relative path for API calls
-          .then((res) => res.json())
-          .then((data) => {
-            setUrls(data)
-            setLoading(false);})
-          .catch((err) => console.error("Error fetching data:", err));
-        
-      }, [session]);
- 
-  // ✅ Corrected `handleChange` Function
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormData({ ...formdata, [e.target.name]: e.target.value });
   };
 
-  // ✅ Added `handleSubmit`
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
     try {
       setLoading1(true);
       const res = await fetch("/api/posturl", {
@@ -51,41 +50,91 @@ const Dashboard = () => {
       });
 
       const result = await res.json();
-      console.log("Response:", result);
       if (res.status === 201) {
-        setUrls((prevUrls) => [...prevUrls, result.newUrl]); // Update the state with the new URL
-        setFormData({ url: "", alias: "" }); // Reset form data
-      } 
-      setLoading1(false);
+        setUrls((prevUrls: Url[]) => [result.newUrl, ...prevUrls]);
+        toast.success("URL shortened successfully!");
+        setFormData({ url: "", alias: "" });
+      } else {
+        toast.error(result.message || "Error shortening URL.");
+      }
     } catch (error) {
+      toast.error("Submission error!");
       console.error("Submission error:", error);
+    } finally {
+      setLoading1(false);
     }
   };
 
   return (
-    <div className="grid place-items-center h-screen ">
-      
-      <form onSubmit={handleSubmit} >
+    <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center gap-6 font-mono">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <h1 className="text-3xl font-bold text-neon-indigo drop-shadow-neon mb-4">URL Hub</h1>
 
-      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-  <legend className="fieldset-legend">Enter URL to shorten</legend>
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 bg-gray-900 p-6 rounded-xl border border-indigo-400 neon-box">
+        <fieldset className="space-y-3">
+          <legend className="text-xl text-indigo-400 font-semibold">Enter URL to Shorten</legend>
 
-  <label className="label">Url</label>
-  <input type="text" className="input" placeholder="My awesome page" name = 'url' onChange={handleChange} />
+          <div className="flex flex-col">
+            <label className="text-sm mb-1">URL</label>
+            <input
+              type="text"
+              name="url"
+              placeholder="https://example.com"
+              value={formdata.url}
+              onChange={handleChange}
+              className="input input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
 
-  <label className="label">Alias (Optional)</label>
-  <input type="text" className="input" placeholder="my-awesome-page" name = 'alias' onChange={handleChange} />
-  <button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" >
-    {loading1 ? <div className="loading loading-spinner loading-lg"></div>: "Shorten"}
-    </button>
-</fieldset>
+          <div className="flex flex-col">
+            <label className="text-sm mb-1">Alias (Optional)</label>
+            <input
+              type="text"
+              name="alias"
+              placeholder="my-custom-alias"
+              value={formdata.alias}
+              onChange={handleChange}
+              className="input input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
+
+          <button
+            className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded shadow-md shadow-indigo-500/50"
+            type="submit"
+            disabled={loading1}
+          >
+            {loading1 ? (
+              <div className="loading loading-spinner loading-sm text-white"></div>
+            ) : (
+              "Shorten"
+            )}
+          </button>
+        </fieldset>
       </form>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      {loading && <div className="loading loading-spinner loading-lg"></div>}
-      {urls.length === 0 && !loading && <div className="text-2xl font-bold">No URLs found</div>}
-        <List urls={urls} />
 
+      <div className="w-full max-w-3xl">
+        {loading ? (
+          <div className="text-indigo-300 text-xl">Loading URLs...</div>
+        ) : urls.length === 0 ? (
+          <div className="text-indigo-300 text-xl">No URLs found yet.</div>
+        ) : (
+          urls.map((url: Url, ind: number) => (
+              <List key={ind} url={url} Delete={handleDeleteUrl} />
+          ))
+        )}
+      </div>
 
+      <style jsx>{`
+       
+
+        .neon-box {
+          box-shadow: 0 0 10px indigo, 0 0 20px indigo, 0 0 30px indigo;
+        }
+
+        .drop-shadow-neon {
+          text-shadow: 0 0 5px indigo, 0 0 10px indigo, 0 0 20px indigo;
+        }
+      `}</style>
     </div>
   );
 };

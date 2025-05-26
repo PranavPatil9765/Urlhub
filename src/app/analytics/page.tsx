@@ -93,14 +93,14 @@ const AnalyticsPage: React.FC = () => {
       </div>
 
 
-      <div className="flex justify-center items-center  gap-4">
+      <div className="grid grid-cols-1 m-auto md:grid-cols-[2fr_1fr] md:w-[80%] items-center gap-4">
         {/* ✅ Bar Chart */}
         <div className="mb-8 w-full max-w-2xl">
           <h2 className="text-xl font-semibold">Click Distribution</h2>
           <Bar data={clickData} />
         </div>
         {/* ✅ Pie Chart (User Agents) */}
-        <div className="mb-8 w-2xs max-w-2xl">
+        <div className="mb-8 w-full md:w-[80%] max-w-2xl">
           <h2 className="text-xl font-semibold">User Agent Distribution</h2>
           <Pie data={userAgentData} />
         </div>

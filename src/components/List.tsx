@@ -58,10 +58,10 @@ const List = ({ url, Delete }: { url: Url; Delete: (shortUrl: string) => void })
       )}
 
       {/* MAIN CARD */}
-      <div className="bg-black text-indigo-300 p-6 m-4 rounded-xl shadow-lg border border-indigo-500 neon-border w-full transition hover:scale-[1.02] duration-300">
+      <div className="bg-black text-indigo-300 p-2 rounded-xl shadow-lg border border-indigo-500 neon-border w-full transition hover:scale-[1.02] duration-300">
         <div className="flex gap-4 items-center justify-between text-xl">
-          <h1 className="text-xl font-bold mb-2 text-indigo-400">{url.Alias}</h1>
-          <div className="flex gap-5 items-center">
+          <h1 className="md:text-xl text:sm ml-2 font-bold mb-2 text-indigo-400">{url.Alias}</h1>
+          <div className="flex md:gap-5 gap-2 items-center">
             <button onClick={handleCopy} className="hover:text-green-400 transition" title="Copy">
               <FaRegCopy />
             </button>
@@ -86,9 +86,9 @@ const List = ({ url, Delete }: { url: Url; Delete: (shortUrl: string) => void })
           </div>
         </div>
 
-        <p className="mb-1">🧩 <span className="text-indigo-200">Short URL:</span> {process.env.NEXT_PUBLIC_API_BASE_URL}/api/{url.shortUrl}</p>
-        <p className="mb-1">🌐 <span className="text-indigo-200">Original URL:</span> {url.originalUrl}</p>
-        <p className="mb-1">📅 <span className="text-indigo-200">Created At:</span> {new Date(url.createdAt).toLocaleString()}</p>
+        <span className="break-words block text-sm">🧩 <span className="text-indigo-200 ">Short URL:</span > {process.env.NEXT_PUBLIC_API_BASE_URL}/api/{url.shortUrl}</span>
+        <span className="break-words block text-sm">🌐 <span className="text-indigo-200 text-sm">Original URL:</span> {url.originalUrl}</span>
+        <span className="break-words block text-sm">📅 <span className="text-indigo-200 text-sm">Created At:</span> {new Date(url.createdAt).toLocaleString()}</span>
 
         {copied && (
           <p className="mt-2 text-green-400 text-sm">Copied to clipboard!</p>

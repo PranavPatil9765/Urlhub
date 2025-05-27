@@ -26,7 +26,7 @@ const AnalyticsPage: React.FC = () => {
   const { data: session } = useSession(); // Use session to check authentication
   const [clickData, setClickData] = useState<ChartData>({ labels: [], datasets: [] });
   const [userAgentData, setUserAgentData] = useState<ChartData>({ labels: [], datasets: [] });
-
+  
   useEffect(() => {
 
     if(!session){
@@ -73,40 +73,46 @@ const AnalyticsPage: React.FC = () => {
     fetchAnalyticsData();
   }, [session]);
 
+
+ 
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Analytics Dashboard</h1>
+  <div className="p-6">
+    <h1 className="text-2xl font-bold mb-4">Analytics Dashboard</h1>
 
-      {/* ✅ Line Chart */}
-
-    <h1>
-        Total Clicks : {clickData.datasets[0]?.data?.reduce((acc, curr) => acc + curr, 0) || 0}
-    </h1>
-
-
-      <div className="flex justify-center items-center">
-
-        <div className="mb-8 w-full max-w-3xl">
-          <h2 className="text-xl font-semibold">Clicks Over Time</h2>
-          <Line data={clickData} />
-        </div>
+    {clickData.datasets.length === 0 ? (
+      <div className="text-center text-gray-500 text-lg">
+        No analytics data available.
       </div>
+    ) : (
+      <>
+        <h1>
+          Total Clicks: {clickData.datasets[0]?.data?.reduce((acc, curr) => acc + curr, 0) || 0}
+        </h1>
 
+        <div className="flex justify-center items-center">
+          <div className="mb-8 w-full max-w-3xl">
+            <h2 className="text-xl font-semibold">Clicks Over Time</h2>
+            <Line data={clickData} />
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 m-auto md:grid-cols-[2fr_1fr] md:w-[80%] items-center gap-4">
-        {/* ✅ Bar Chart */}
-        <div className="mb-8 w-full max-w-2xl">
-          <h2 className="text-xl font-semibold">Click Distribution</h2>
-          <Bar data={clickData} />
+        <div className="grid grid-cols-1 m-auto md:grid-cols-[2fr_1fr] md:w-[80%] items-center gap-4">
+          <div className="mb-8 w-full max-w-2xl">
+            <h2 className="text-xl font-semibold">Click Distribution</h2>
+            <Bar data={clickData} />
+          </div>
+
+          <div className="mb-8 w-full md:w-[80%] max-w-2xl">
+            <h2 className="text-xl font-semibold">User Agent Distribution</h2>
+            <Pie data={userAgentData} />
+          </div>
         </div>
-        {/* ✅ Pie Chart (User Agents) */}
-        <div className="mb-8 w-full md:w-[80%] max-w-2xl">
-          <h2 className="text-xl font-semibold">User Agent Distribution</h2>
-          <Pie data={userAgentData} />
-        </div>
-      </div>
-    </div>
-  );
+      </>
+    )}
+  </div>
+);
+
 };
 
 export default AnalyticsPage;

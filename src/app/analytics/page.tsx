@@ -61,7 +61,7 @@ const AnalyticsPage: React.FC = () => {
               label: "User Agent Distribution",
               data: Object.values(data.userAgents),
               backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#E74C3C"],
-              hoverOffset: 4,
+              
             },
           ],
         });

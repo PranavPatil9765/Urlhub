@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     await newUser.save();
 
     // Generate JWT token for session
-    const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name }, process.env.JWT_SECRET as string, {
       expiresIn: "1h",
     });
 

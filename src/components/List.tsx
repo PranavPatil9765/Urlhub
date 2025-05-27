@@ -18,7 +18,7 @@ const List = ({ url, Delete }: { url: Url; Delete: (shortUrl: string) => void })
   const [showQR, setShowQR] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${url.shortUrl}`);
+    await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/${url.shortUrl}`);
     setCopied(true);
     toast.success("Short URL copied!");
     setTimeout(() => setCopied(false), 1500);

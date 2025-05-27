@@ -44,7 +44,7 @@ const myurls = () => {
     },[page,session])
 
      const handleDeleteUrl = (shortUrl: string) => {
-    setUrls(prev => prev.filter(url => url.shortUrl !== shortUrl));
+    setUrls(prev => prev.filter((url: { shortUrl: string }) => url.shortUrl !== shortUrl));
     // toast.success("URL deleted successfully");
   };
 

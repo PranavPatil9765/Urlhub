@@ -82,7 +82,7 @@ const Dashboard = () => {
               placeholder="https://example.com"
               value={formdata.url}
               onChange={handleChange}
-              className="input input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="input w-full input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
 
@@ -94,7 +94,7 @@ const Dashboard = () => {
               placeholder="my-custom-alias"
               value={formdata.alias}
               onChange={handleChange}
-              className="input input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="input w-full input-bordered bg-black border-indigo-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
 

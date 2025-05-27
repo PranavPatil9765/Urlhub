@@ -36,9 +36,12 @@ export async function GET(req: Request) {
             if (!res || res.length === 0) {
                 return NextResponse.json({ message: "No URLs found" }, { status: 404 });
             }
+            // console.log(res);
+            
         
             return NextResponse.json(res);
         } catch (error) {
+            console.log(error);
             return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
         }
     }

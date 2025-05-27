@@ -6,7 +6,7 @@ const page = () => {
   return (
     <div>
       <h1 className='text-5xl font-bold text-center mt-6 '>
-        Wellcome to <span className='text-blue-500  underline'>URL Hub </span> 
+        Welcome to <span className='text-blue-500  underline'>URL Hub </span> 
         <br />
       </h1>
       <div className='flex justify-center items-center md:flex-row flex-col-reverse gap-5 p-5'>

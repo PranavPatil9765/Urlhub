@@ -13,9 +13,9 @@ export async function GET(req: Request) {
         await connectDB(); // Ensure the database connection is established
         const useremail = session?.user?.email;
         const res = await url.find({ email:useremail }).limit(5).sort({ createdAt: -1 });
-        if (!res || res.length === 0) {
-            return NextResponse.json({ message: "No URLs found" }, { status: 404 });
-        }
+        // if (!res || res.length === 0) {
+        //     return NextResponse.json({ message: "No URLs found" }, { status: 404 });
+        // }
     
         return NextResponse.json(res);
     } catch (error) {

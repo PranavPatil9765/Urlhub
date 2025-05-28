@@ -112,17 +112,22 @@ const Dashboard = () => {
         </fieldset>
       </form>
 
-      <div className="w-full max-w-3xl">
-        {loading ? (
-          <div className="text-indigo-300 text-xl">Loading URLs...</div>
-        ) : urls.length === 0 ? (
-          <div className="text-indigo-300 text-xl">No URLs found yet.</div>
-        ) : (
-          urls.map((url: Url, ind: number) => (
-              <List key={ind} url={url} Delete={handleDeleteUrl} />
-          ))
-        )}
-      </div>
+     <div className="w-full max-w-3xl text-center">
+  {loading ? (
+    <div className="text-indigo-300 text-xl">Loading URLs...</div>
+  ) : Array.isArray(urls) && urls.length === 0 ? (
+    <div className="text-indigo-300 text-xl">No URLs found yet.</div>
+  ) : (
+    // <div className="text-white">
+
+    // {urls.length}
+    // </div>
+    urls.map((url: Url, ind: number) => (
+      <List key={ind} url={url} Delete={handleDeleteUrl} />
+    ))
+  )}
+</div>
+
 
       <style jsx>{`
        

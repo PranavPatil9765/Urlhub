@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { manualLogin } from "@/utils/auth";
 import Link from "next/link";
+import {toast,ToastContainer} from 'react-toastify' 
 
 const Login = () => {
   const { data: session } = useSession();
@@ -17,7 +18,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await manualLogin(formData.email, formData.password);
+    if(await manualLogin(formData.email, formData.password)==false){
+      toast.error("invalid Credentials");
+    }
+
+    
   };
 
   useEffect(() => {
@@ -28,6 +33,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black text-white px-4">
+      <ToastContainer />
       <div className="w-full max-w-md p-8 rounded-lg shadow-lg bg-gradient-to-br from-blue-900 via-black to-purple-900 border border-blue-500 relative neon-border">
         <h2 className="text-3xl font-extrabold text-center mb-6 text-cyan-400 drop-shadow-lg">
           Welcome Back

@@ -112,7 +112,7 @@ const Dashboard = () => {
         </fieldset>
       </form>
 
-     <div className="w-full max-w-3xl text-center">
+     <div className="w-full max-w-3xl">
   {loading ? (
     <div className="text-indigo-300 text-xl">Loading URLs...</div>
   ) : Array.isArray(urls) && urls.length === 0 ? (

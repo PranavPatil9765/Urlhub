@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
     const url = new URL(req.url);
     const shorturl = url.pathname.split("/").pop(); // Extract "shorturl" from URL
-
+    console.log(shorturl);
     if (!shorturl || typeof shorturl !== "string") {
       return NextResponse.json({ message: "Invalid Short URL" }, { status: 400 });
     }

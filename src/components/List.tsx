@@ -58,7 +58,7 @@ const List = ({ url, Delete }: { url: Url; Delete: (shortUrl: string) => void })
       )}
 
       {/* MAIN CARD */}
-      <div className="bg-black text-indigo-300 p-2 rounded-xl shadow-lg border border-indigo-500 neon-border w-full transition hover:scale-[1.02] duration-300">
+      <div className="bg-black text-indigo-300 p-2 rounded-xl mb-3 shadow-lg border border-indigo-500 neon-border w-full transition hover:scale-[1.02] duration-300">
         <div className="flex gap-4 items-center justify-between text-xl">
           <h1 className="md:text-xl text:sm ml-2 font-bold mb-2 text-indigo-400">{url.Alias}</h1>
           <div className="flex md:gap-5 gap-2 items-center">
